@@ -1,0 +1,17 @@
+#!/bin/bash
+
+PRODUCT_NAME="shearwater"
+
+rsync -r --delete "/tmp/imagiro/${PRODUCT_NAME}/${PRODUCT_NAME}.app" /Applications
+
+mkdir -p "${HOME}/Library/Application Support/imagiro/${PRODUCT_NAME}"
+mkdir -p "/Library/Application Support/imagiro/${PRODUCT_NAME}"
+rsync -r "/tmp/imagiro/${PRODUCT_NAME}/resources/user/" "${HOME}/Library/Application Support/imagiro/${PRODUCT_NAME}"
+rsync -r "/tmp/imagiro/${PRODUCT_NAME}/resources/system/" "/Library/Application Support/imagiro/${PRODUCT_NAME}"
+
+chown -R ${USER}:staff "${HOME}/Library/Application Support/imagiro"
+chmod 755 "${HOME}/Library/Application Support/imagiro"
+chown -R ${USER}:staff "${HOME}/Library/Application Support/imagiro/${PRODUCT_NAME}"
+chown -R ${USER}:staff "/Applications/${PRODUCT_NAME}.app"
+
+rm -rf "/tmp/imagiro"
