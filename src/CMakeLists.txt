@@ -1,13 +1,14 @@
 set(PluginName template)
 set(PluginCode iptp)
 
-project("${PluginName}" VERSION 1.0)
-configure_file(src/version.h.in src/version.h)
+project("${PluginName}" VERSION 0.1)
+configure_file(version.h.in version.h)
 
 option(JUCE_COPY_PLUGIN_AFTER_BUILD "Copy Plugin" ON)
 
 juce_add_plugin("${PluginName}"
-        ICON_BIG icon.jpg
+        ICON_BIG resources/icon-large.png
+        ICON_SMALL resources/icon-small.png
         COMPANY_NAME imagiro                        # Specify the name of the plugin's author
         IS_SYNTH FALSE                               # Is this a synth or an effect?
         NEEDS_MIDI_INPUT FALSE
@@ -20,7 +21,7 @@ juce_add_plugin("${PluginName}"
 
 target_sources("${PluginName}"
         PRIVATE
-        src/PluginProcessor.cpp
+        processor/PluginProcessor.cpp
         )
 
 target_compile_definitions("${PluginName}"
@@ -42,7 +43,8 @@ target_link_libraries("${PluginName}"
         "${PluginName}Data"
         juce::juce_audio_utils
         yaml-cpp
-        web_ui
+        imagiro-webview
+        imagiro-processor
         PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

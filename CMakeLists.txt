@@ -1,4 +1,4 @@
- cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16)
 project(imagiro-plugins)
 
 set (CMAKE_CXX_STANDARD 17)
@@ -34,7 +34,7 @@ option(JUCE_BUILD_EXAMPLES "Build JUCE Examples" OFF)
 #Fetching JUCE from git
 # set(CPM_JUCE_SOURCE "/Users/imagiro/JUCE") # uncomment this line to use juce offline
 CPMAddPackage("gh:juce-framework/JUCE#7.0.7")
-CPMAddPackage("gh:jbeder/yaml-cpp#yaml-cpp-0.7.0")
+CPMAddPackage("gh:jbeder/yaml-cpp#0.8.0")
 #CPMAddPackage("gh:sudara/melatonin_perfetto#main")
 #CPMAddPackage("gh:catchorg/Catch2@3.3.2")
 

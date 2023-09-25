@@ -1,8 +1,9 @@
 #include "PluginProcessor.h"
 #include "BinaryData.h"
+#include "../../cmake-build-debug/src/juce_binarydata_templateData/JuceLibraryCode/BinaryData.h"
 
 TemplateAudioProcessor::TemplateAudioProcessor()
-        : WebProcessor(getDefaultProperties()),
+        : WebProcessor(getDefaultProperties(), PROJECT_VERSION, "template"),
 #if JUCE_DEBUG
           paramLoader(*this, juce::File(
                   juce::String(SRCPATH) + "/Parameters.yaml"))
@@ -26,6 +27,8 @@ void TemplateAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 {
     imagiro::Processor::processBlock(buffer, midiMessages);
     juce::ignoreUnused(midiMessages);
+
+    if (!auth.isAuthorized()) return;
 
     // processing
 }

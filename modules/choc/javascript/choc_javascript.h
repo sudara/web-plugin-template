@@ -84,15 +84,23 @@ namespace choc::javascript
     {
     public:
         /// To create a Context, use a function such as choc::javascript::createQuickJSContext();
-        Context() = delete;
+        Context() = default;
         Context (Context&&);
         Context& operator= (Context&&);
         ~Context();
 
+        /// When parsing modules, this function is expected to take a path to a module, and
+        /// to return the content of that module.
+        using ReadModuleContentFn = std::function<std::string(std::string_view)>;
+
         //==============================================================================
         /// Evaluates the given chunk of javascript.
         /// If there are any parse errors, this will throw a choc::javascript::Error exception.
-        choc::value::Value evaluate (const std::string& javascriptCode);
+        /// If the engine supports modules, then providing a value for the resolveModuleContent
+        /// function will treat the code as a module and will call your function to read the
+        /// content of any dependencies.
+        choc::value::Value evaluate (const std::string& javascriptCode,
+                                     ReadModuleContentFn* resolveModuleContent = nullptr);
 
         /// Attempts to invoke a global function with no arguments.
         /// Any errors will throw a choc::javascript::Error exception.
@@ -168,7 +176,7 @@ struct Context::Pimpl
     virtual ~Pimpl() = default;
 
     virtual void registerFunction (const std::string&, NativeFunction) = 0;
-    virtual choc::value::Value evaluate (const std::string&) = 0;
+    virtual choc::value::Value evaluate (const std::string&, ReadModuleContentFn*) = 0;
     virtual void prepareForCall (std::string_view, uint32_t numArgs) = 0;
     virtual choc::value::Value performCall() = 0;
     virtual void pushObjectOrArray (const choc::value::ValueView&) = 0;
@@ -237,10 +245,10 @@ inline void Context::registerFunction (const std::string& name, NativeFunction f
     pimpl->registerFunction (name, std::move (fn));
 }
 
-inline choc::value::Value Context::evaluate (const std::string& javascriptCode)
+inline choc::value::Value Context::evaluate (const std::string& javascriptCode, ReadModuleContentFn* resolveModule)
 {
     CHOC_ASSERT (pimpl != nullptr); // cannot call this on a moved-from context!
-    return pimpl->evaluate (javascriptCode);
+    return pimpl->evaluate (javascriptCode, resolveModule);
 }
 
 } // namespace choc::javascript
@@ -250,7 +258,7 @@ inline choc::value::Value Context::evaluate (const std::string& javascriptCode)
 #ifdef CHOC_JAVASCRIPT_IMPLEMENTATION
  // The way the javascript classes work has changed: instead of
  // setting CHOC_JAVASCRIPT_IMPLEMENTATION in one of your source files, just
- // include the actual engine that you want to use, e.g. choc_javasscript_QuickJS.h
+ // include the actual engine that you want to use, e.g. choc_javascript_QuickJS.h
  // in (only!) one of your source files, and use that to create instances of that engine.
  #error "CHOC_JAVASCRIPT_IMPLEMENTATION is deprecated"
 #endif

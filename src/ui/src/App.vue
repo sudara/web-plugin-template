@@ -14,9 +14,9 @@
       </div>
       </Transition>
       <div class="footer">
-        <span>template</span>
+        <span>{{ store.state.pluginName }}</span>
         <div class="h-full flex items-center">
-          imagiro
+          {{ store.state.pluginVersion }}
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ const store = useStore();
 
 let gainParam = ref<Parameter | null>();
 
-store.dispatch('reloadParameters').then(() => {
+store.dispatch('initPlugin').then(() => {
   gainParam.value = store.state.parameters.get('gain');
 });
 

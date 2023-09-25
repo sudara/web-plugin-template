@@ -11,14 +11,16 @@
 -- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
-CMake Error at CMakeLists.txt:6 (include):
-  include could not find requested file:
-
-    cmake/CPM.cmake
-
-
-CMake Error at CMakeLists.txt:36 (CPMAddPackage):
-  Unknown CMake command "CPMAddPackage".
-
-
--- Configuring incomplete, errors occurred!
+-- Downloading CPM.cmake to /Users/imagiro/Documents/audiodev/juce/templates/web-ui/cmake-build-relwithdebinfo/cmake/CPM_0.35.0.cmake
+-- Found Git: /opt/homebrew/bin/git (found version "2.39.2") 
+-- Configuring juceaide
+-- Building juceaide
+-- Exporting juceaide
+-- CPM: adding package JUCE@7.0.7 (7.0.7 at /Users/imagiro/Documents/audiodev/juce/templates/web-ui/cmake/cache/juce/b9b03427b3688bb125e448a777ecb1c5262d4020)
+-- CPM: adding package yaml-cpp@0.8.0 (0.8.0 at /Users/imagiro/Documents/audiodev/juce/templates/web-ui/cmake/cache/yaml-cpp/905940a232aea3437e2fb77334461b1fe343318b)
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done (31.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/imagiro/Documents/audiodev/juce/templates/web-ui/cmake-build-relwithdebinfo

@@ -8746,7 +8746,7 @@ JSValue js_string_codePointRange(JSContext *ctx, JSValueConst this_val,
 
 void *js_malloc_rt(JSRuntime *rt, size_t size);
 void js_free_rt(JSRuntime *rt, void *ptr);
-void *js_realloc_rt(JSRuntime *rt, void *ptr, size_t size);
+void *js_realloc_rt(void *rt, void *ptr, size_t size);
 size_t js_malloc_usable_size_rt(JSRuntime *rt, const void *ptr);
 void *js_mallocz_rt(JSRuntime *rt, size_t size);
 
@@ -11247,9 +11247,9 @@ void js_free_rt(JSRuntime *rt, void *ptr)
     rt->mf.js_free(&rt->malloc_state, ptr);
 }
 
-void *js_realloc_rt(JSRuntime *rt, void *ptr, size_t size)
+void *js_realloc_rt(void *rt, void *ptr, size_t size)
 {
-    return rt->mf.js_realloc(&rt->malloc_state, ptr, size);
+    return ((JSRuntime*) rt)->mf.js_realloc(&((JSRuntime*) rt)->malloc_state, ptr, size);
 }
 
 size_t js_malloc_usable_size_rt(JSRuntime *rt, const void *ptr)
@@ -64081,9 +64081,30 @@ struct QuickJSContext  : public Context::Pimpl
     void pushArg (double v) override                                  { functionArgs.push_back (JS_NewFloat64 (context, v)); }
     void pushArg (bool v) override                                    { functionArgs.push_back (JS_NewBool    (context, v)); }
 
-    choc::value::Value evaluate (const std::string& code) override
+    choc::value::Value evaluate (const std::string& code, Context::ReadModuleContentFn* resolveModule) override
     {
+        if (resolveModule != nullptr)
+        {
+            JS_SetModuleLoaderFunc (runtime, nullptr, moduleLoaderFunc, resolveModule);
+            auto result = takeValue (JS_Eval (context, code.c_str(), code.size(), "", JS_EVAL_TYPE_MODULE)).toChocValue();
+            JS_SetModuleLoaderFunc (runtime, nullptr, nullptr, nullptr);
+            return result;
+        }
+
         return takeValue (JS_Eval (context, code.c_str(), code.size(), "", JS_EVAL_TYPE_GLOBAL)).toChocValue();
+    }
+
+    static JSModuleDef* moduleLoaderFunc (JSContext* ctx, const char* module_name, void* resolveModule)
+    {
+        if (auto content = (*static_cast<Context::ReadModuleContentFn*> (resolveModule)) (std::string_view (module_name)); ! content.empty())
+        {
+            auto result = ValuePtr (JS_Eval (ctx, content.data(), content.length(), module_name,
+                                             JS_EVAL_TYPE_MODULE | JS_EVAL_FLAG_COMPILE_ONLY), ctx);
+            result.throwIfError();
+            return static_cast<JSModuleDef*> (JS_VALUE_GET_PTR (result.get()));
+        }
+
+        return {};
     }
 
     void prepareForCall (std::string_view functionName, uint32_t) override

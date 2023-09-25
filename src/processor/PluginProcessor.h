@@ -1,9 +1,13 @@
 #pragma once
 
-#include <web_ui/web_ui.h>
+#include "version.h"
+
+#include <imagiro-webview/imagiro-webview.h>
+#include <juce_audio_processors/juce_audio_processors.h>
+#include "imagiro-processor/src/parameter/ParameterLoader.h"
 
 using namespace imagiro;
-class TemplateAudioProcessor : public imagiro::WebProcessor {
+class TemplateAudioProcessor : public WebProcessor {
 public:
     TemplateAudioProcessor();
     ~TemplateAudioProcessor() override;

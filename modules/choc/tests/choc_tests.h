@@ -69,6 +69,8 @@
 #include "../audio/choc_SampleBufferUtilities.h"
 #include "../audio/choc_AudioMIDIBlockDispatcher.h"
 #include "../javascript/choc_javascript.h"
+#include "../javascript/choc_javascript_Timer.h"
+#include "../javascript/choc_javascript_Console.h"
 
 #include "choc_UnitTest.h"
 
@@ -2013,7 +2015,7 @@ inline void testMIDIFiles (TestProgress& progress)
 }
 
 //==============================================================================
-inline void testJavascript (TestProgress& progress, std::function<choc::javascript::Context()> createContext)
+inline void testJavascript (TestProgress& progress, std::function<choc::javascript::Context()> createContext, bool isDuktape)
 {
     {
         CHOC_TEST (Basics)
@@ -2103,15 +2105,87 @@ inline void testJavascript (TestProgress& progress, std::function<choc::javascri
         }
         CHOC_CATCH_UNEXPECTED_EXCEPTION
     }
+
+    {
+        CHOC_TEST (Timers)
+
+        try
+        {
+            auto context = createContext();
+            registerTimerFunctions (context);
+            int result = 0;
+            context.registerFunction ("testDone", [&] (choc::javascript::ArgumentList args) -> choc::value::Value
+                                                   {
+                                                       result = args.get<int> (0);
+                                                       choc::messageloop::stop();
+                                                       return {};
+                                                   });
+
+            context.evaluate (R"(
+                var result = 0;
+                var intID;
+
+                function i()
+                {
+                    if (result == 5)
+                        clearInterval (intID);
+                    else
+                        ++result;
+                }
+
+                function t()
+                {
+                    clearInterval (intID);
+                    testDone (result);
+                }
+
+                setTimeout (t, 500);
+                intID = setInterval (i, 60);
+            )");
+
+            choc::messageloop::run();
+            CHOC_EXPECT_EQ (5, result);
+        }
+        CHOC_CATCH_UNEXPECTED_EXCEPTION
+    }
+
+    if (! isDuktape)
+    {
+        CHOC_TEST (Console)
+
+        try
+        {
+            auto context = createContext();
+
+            std::string output;
+
+            registerConsoleFunctions (context, [&] (std::string_view text, auto level)
+            {
+                output += text;
+                output += std::to_string (static_cast<int> (level));
+            });
+
+            context.evaluate (R"(
+                console.log ("log");
+                console.info ("infoa", "infob");
+                console.warn ("warn");
+                console.error ("error");
+                console.debug ("debug");
+            )");
+
+            CHOC_EXPECT_EQ ("log0infoa1infob1warn2error3debug4", output);
+        }
+        CHOC_CATCH_UNEXPECTED_EXCEPTION
+    }
 }
 
 inline void testJavascript (TestProgress& progress)
 {
     CHOC_CATEGORY (Javascript_Duktape);
-    testJavascript (progress, [] { return choc::javascript::createDuktapeContext(); });
+    testJavascript (progress, [] { return choc::javascript::createDuktapeContext(); }, true);
 
     CHOC_CATEGORY (Javascript_QuickJS);
-    testJavascript (progress, [] { return choc::javascript::createQuickJSContext(); });
+    testJavascript (progress, [] { return choc::javascript::createQuickJSContext(); }, false);
 }
 
 
@@ -2252,6 +2326,7 @@ inline void testAudioFileRoundTrip (TestProgress& progress, choc::audio::BitDept
     FileFormat format;
     std::string file1;
 
+    try
     {
         auto out = std::make_shared<std::ostringstream>();
         CHOC_EXPECT_FALSE (out->fail());
@@ -2282,9 +2357,13 @@ inline void testAudioFileRoundTrip (TestProgress& progress, choc::audio::BitDept
         writer.reset();
         file1 = out->str();
     }
+    CHOC_CATCH_UNEXPECTED_EXCEPTION
 
+    try
     {
-        auto in = std::make_shared<std::istringstream> (file1);
+        std::string padding = "1234567";
+        auto in = std::make_shared<std::istringstream> (padding + file1);
+        in->seekg (static_cast<std::streamoff> (padding.length()));
 
         choc::audio::AudioFileFormatList formats;
         formats.addFormat<choc::audio::OggAudioFileFormat<false>>();
@@ -2305,6 +2384,7 @@ inline void testAudioFileRoundTrip (TestProgress& progress, choc::audio::BitDept
 
         compareBuffers (reloaded, source);
     }
+    CHOC_CATCH_UNEXPECTED_EXCEPTION
 }
 
 inline void testAudioFileFormat (TestProgress& progress)
@@ -2488,10 +2568,11 @@ inline void testThreading (TestProgress& progress)
     }
 }
 
-static void testFileWatcher (TestProgress& progress)
+inline void testFileWatcher (TestProgress& progress)
 {
     CHOC_CATEGORY (FileWatcher);
 
+    try
     {
         CHOC_TEST (Watch)
 
@@ -2551,6 +2632,7 @@ static void testFileWatcher (TestProgress& progress)
         std::filesystem::remove_all (testFile);
         waitFor ("destroyed file test1.txt");
     }
+    CHOC_CATCH_UNEXPECTED_EXCEPTION
 }
 
 //==============================================================================
@@ -2570,24 +2652,28 @@ inline bool runAllTests (TestProgress& progress)
          return true;
     });
 
-    testFileWatcher (progress);
-    testPlatform (progress);
-    testContainerUtils (progress);
-    testStringUtilities (progress);
-    testFileUtilities (progress);
-    testValues (progress);
-    testJSON (progress);
-    testMIDI (progress);
-    testAudioBuffers (progress);
-    testIntToFloat (progress);
-    testFIFOs (progress);
-    testMIDIFiles (progress);
-    testJavascript (progress);
-    testCOM (progress);
-    testStableSort (progress);
-    testAudioFileFormat (progress);
-    testTimers (progress);
-    testThreading (progress);
+    try
+    {
+        testFileWatcher (progress);
+        testPlatform (progress);
+        testContainerUtils (progress);
+        testStringUtilities (progress);
+        testFileUtilities (progress);
+        testValues (progress);
+        testJSON (progress);
+        testMIDI (progress);
+        testAudioBuffers (progress);
+        testIntToFloat (progress);
+        testFIFOs (progress);
+        testMIDIFiles (progress);
+        testJavascript (progress);
+        testCOM (progress);
+        testStableSort (progress);
+        testAudioFileFormat (progress);
+        testTimers (progress);
+        testThreading (progress);
+    }
+    CHOC_CATCH_UNEXPECTED_EXCEPTION
 
     progress.printReport();
     return progress.numFails == 0;

@@ -4,7 +4,9 @@ import { Parameter } from '@/parameter';
 import { getPluginParameters } from '@/composables/controls';
 
 export interface State {
-    parameters: Map<string, Parameter>
+    parameters: Map<string, Parameter>,
+    pluginVersion: string,
+    pluginName: string,
 }
 
 export interface ParameterUpdatePayload {
@@ -17,7 +19,9 @@ export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
   state: {
-    parameters: new Map<string, Parameter>()
+    parameters: new Map<string, Parameter>(),
+    pluginVersion: "",
+    pluginName: ""
   },
   mutations: {
     addParameter(state, parameter : Parameter) {
@@ -30,6 +34,11 @@ export const store = createStore<State>({
     }
   },
   actions: {
+    async initPlugin(context) {
+      context.dispatch("loadCurrentVersion");
+      context.dispatch("loadPluginName");
+      await context.dispatch("reloadParameters");
+    },
     async reloadParameters(context) {
       let parameters = await getPluginParameters();
       console.log(parameters);
@@ -42,6 +51,12 @@ export const store = createStore<State>({
           context.commit('addParameter', param);
         }
       });
+    },
+    async loadCurrentVersion(context) {
+      context.state.pluginVersion = await juce_getCurrentVersion();
+    },
+    async loadPluginName(context) {
+      context.state.pluginName = await juce_getPluginName();
     }
   }
 })

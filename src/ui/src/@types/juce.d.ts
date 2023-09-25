@@ -7,3 +7,6 @@ declare function reloadPluginParameters() : Array;
 declare function getGains() : Array<number>;
 declare function getDisplayValue(id : string);
 declare function getDisplayValue(id : string, value: number);
+
+declare function juce_getCurrentVersion() : Promise<string>;
+declare function juce_getPluginName() : Promise<string>;
