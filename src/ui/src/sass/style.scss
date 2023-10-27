@@ -42,14 +42,13 @@ body {
   font-family: IngramMono;
 }
 
-/* we will explain what these classes do next! */
 .v-enter {
   opacity: 0;
 }
 
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+  transition: all 0.25s cubic-bezier(0.215, 0.610, 0.355, 1);
 }
 
 .v-enter-from,

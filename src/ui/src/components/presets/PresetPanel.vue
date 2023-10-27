@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-light bg-opacity-90">
+    <div class="bg-light flex flex-col">
         <div class="w-full px-3 flex justify-between border-b border-dark">
             <div>
                 <button class="btn btn-no-bg" @click="startSavePreset">+</button>
@@ -10,25 +10,25 @@
                 <button class="btn btn-no-bg">r</button>
             </div>
         </div>
-        <div class="shadow-top px-3 py-2">
-            <div v-for="[category, presets] in Object.entries(presetStore.presets)">
-                {{ category }}
-                <div class="" v-for="preset in presets">
-                    <button class="ps-5 btn btn-no-bg w-full text-left" @click="loadPreset(preset)">
-                        - {{ preset.name }} ({{ preset.path }})
-                    </button>
+        <div class="shadow-top grow">
+            <div class="overflow-scroll px-3 py-2 h-full">
+                <div v-for="[category, presets] of presetStore.presets">
+                    <PresetListCategory :category="category" :presets="presets" />
                 </div>
-            </div>
-            <div v-show="showPresetInput" class="bg-dark text-light">
-                <input ref="pi" class="ps-5 btn btn-no-bg w-full text-left" @keyup.enter.native="savePreset">
+                <div v-show="showPresetInput" class="ps-8">
+                    <input ref="pi" class="ps-5 btn btn-no-bg w-full text-left" @keyup.enter.native="savePreset"
+                    @keypress="onNameKeypress($event)" @keydown="onNameKeydown">
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { Preset } from '@/presets/Preset';
 import { usePresetStore } from '@/store/presets';
 import { nextTick, ref } from 'vue';
+import PresetListCategory from './PresetListCategory.vue';
 
 const showPresetInput = ref(false);
 const pi = ref<HTMLInputElement>();
@@ -41,13 +41,42 @@ function startSavePreset() {
 
 function savePreset() {
     if (!pi.value) return;
-    juce_createPreset(pi.value.value, "cat");
+    let name = pi.value.value.replace(/[^a-z0-9_]/gi, '');
+    juce_createPreset(name, "user");
     showPresetInput.value = false;
+    pi.value.blur();
     pi.value.value = '';
 }
 
-function loadPreset(p : Preset) {
-    juce_loadPreset(p.path);
+
+function onNameKeypress (e : KeyboardEvent) {
+    if (!pi.value) return;
+
+    if (e.key == 'Escape') {
+        showPresetInput.value = false;
+        if (pi.value) pi.value.value = '';
+    }
+
+    if (pi.value?.value.length > 18) {
+        e.preventDefault();
+        return false;
+    }
+
+    var regex = new RegExp("^[a-zA-Z0-9 _]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+}
+
+function onNameKeydown(e : KeyboardEvent) {
+    if (e.key == 'a' && (e.ctrlKey || e.metaKey)) {
+        console.log("select");
+        pi.value?.select();
+    }
 }
 
 </script>

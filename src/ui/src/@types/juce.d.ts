@@ -13,4 +13,7 @@ declare function juce_requestFileChooser(filePatternsAllowed : string) : void;
 
 declare function juce_createPreset(name: string, category: string);
 declare function juce_loadPreset(path: string);
-declare function juce_getAvailablePresets() : Promise<any>;
+declare function juce_nextPreset();
+declare function juce_prevPreset();
+declare function juce_getAvailablePresets(reloadCache: boolean) : Promise<any>;
+declare function juce_getActivePreset() : Promise<Preset>;

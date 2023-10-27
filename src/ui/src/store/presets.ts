@@ -4,19 +4,22 @@ import { defineStore } from 'pinia'
 export const usePresetStore = defineStore('presets', {
   state: () => {
     return {
-      showPresetsPanel: true,
-      presets: [],
+      showPresetsPanel: false,
+      presets: <Map<string, Preset[]>>{},
       activePreset: <Preset>{
         name: "init"
       }
     }
   },
   actions: {
-    reloadCurrentPreset() {
-
+    async reloadCurrentPreset() {
+      this.activePreset = await juce_getActivePreset();
+      navigator.clipboard.writeText(JSON.stringify(this.activePreset));
     },
-    async reloadPresets() {
-      this.presets = await juce_getAvailablePresets();
+    async reloadPresets(reloadCache: boolean = false) {
+      const presetsObj = await juce_getAvailablePresets(reloadCache);
+      this.presets = new Map(Object.entries(presetsObj));
+      this.reloadCurrentPreset();
     }
   }
 });
