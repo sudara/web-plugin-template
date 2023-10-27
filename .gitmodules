@@ -1,12 +1,12 @@
-[submodule "modules/imagiro-webview"]
-	path = modules/imagiro-webview
-	url = git@github.com:augustpemberton/imagiro-webview.git
-[submodule "modules/imagiro-processor"]
-	path = modules/imagiro-processor
-	url = git@github.com:augustpemberton/imagiro-processor.git
 [submodule "modules/choc"]
 	path = modules/choc
 	url = git@github.com:Tracktion/choc.git
-[submodule "modules/imagiro-util"]
-	path = modules/imagiro-util
-	url = git@github.com:augustpemberton/imagiro-util.git
+[submodule "modules/imagiro_util"]
+	path = modules/imagiro_util
+	url = git@github.com:augustpemberton/imagiro_util.git
+[submodule "modules/imagiro_webview"]
+	path = modules/imagiro_webview
+	url = git@github.com:augustpemberton/imagiro_webview.git
+[submodule "modules/imagiro_processor"]
+	path = modules/imagiro_processor
+	url = git@github.com:augustpemberton/imagiro_processor.git

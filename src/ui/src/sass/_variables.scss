@@ -4,4 +4,9 @@ $piano-blue: #bfccd2;
 $piano-yellow: #F1AC00;
 $piano-green: #83af80;
 $piano-orange: #cf8a44;
-$piano-red: #cf5244;
+$piano-red: #d86363;
+
+$bg: $piano-light;
+$bg-darker: darken($piano-light, 5);
+
+$slider-color: $piano-green;

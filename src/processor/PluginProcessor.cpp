@@ -1,6 +1,5 @@
 #include "PluginProcessor.h"
 #include "BinaryData.h"
-#include "../../cmake-build-debug/src/juce_binarydata_templateData/JuceLibraryCode/BinaryData.h"
 
 TemplateAudioProcessor::TemplateAudioProcessor()
         : WebProcessor(getDefaultProperties(), PROJECT_VERSION, "template"),
@@ -12,6 +11,7 @@ TemplateAudioProcessor::TemplateAudioProcessor()
 #endif
 {
     juce::ignoreUnused(paramLoader);
+    WebProcessor::init();
 }
 
 TemplateAudioProcessor::~TemplateAudioProcessor() {

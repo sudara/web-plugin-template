@@ -1,7 +1,7 @@
 juce_add_modules(
-        imagiro-processor
-        imagiro-webview
-        imagiro-util
+        imagiro_processor
+        imagiro_webview
+        imagiro_util
 )
 
 include_directories(choc)

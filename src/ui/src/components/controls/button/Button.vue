@@ -1,18 +1,17 @@
 <template>
-  <div class="p-3">
-      <div class="button" :class="{'active': getToggleState()}" ref="button">
-          <slot name="buttonText" :toggleState="getToggleState()"></slot>
+  <div class="h-full flex items-center justify-center">
+      <div class="button flex items-center justify-center" :class="{'active': getToggleState()}" ref="button">
+        <div class="w-min p-5">
+          <slot :toggleState="getToggleState()"></slot>
+
+        </div>
       </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import SliderBase from './SliderBase.vue';
-import { isHovering } from '@/composables/mouse';
-import { Parameter } from "@/parameter";
-
-const maxShadow = 0.3;
+import { onMounted, ref } from 'vue';
+import Parameter from '@/parameter/Parameter';
 
 const props = defineProps<{
   param: Parameter
@@ -42,13 +41,13 @@ onMounted(() => {
 $slider-color: $piano-green;
 
 .button {
+  min-width: 4em;
+  aspect-ratio: 1/1;
+
   border-radius: 50%;
   border-width: 3px;
   border-style: solid;
   border-color: $slider-color;
-  height: 100%;
-  aspect-ratio: 1/1;
-  margin: auto;
   position: relative;
   cursor: pointer;
 

@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@/sass/_variables.scss';
+@import '@/sass/controls.scss';
+@import '@/sass/context-menu.scss';
+@import '@/sass/util.scss';
+
+h1 {
+    @apply text-2xl;
+}
+
+h2 {
+    @apply text-xl;
+}
+
+h3 {
+    @apply text-lg;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+@font-face {
+  font-family: 'IngramMono';
+  font-style: normal;
+  src: local('Opensans-Bold'), url(@/assets/fonts/IngramMono.woff) format('woff');
+}
+
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  background-color: $piano-light;
+  font-family: IngramMono;
+}
+
+/* we will explain what these classes do next! */
+.v-enter {
+  opacity: 0;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+  transform: translateY(5px);
+}

@@ -1,0 +1,104 @@
+button {
+    color: $piano-dark;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:active {
+        transform: translateY(5px);
+    }
+
+    &.no-move:active {
+        transform: none;
+    }
+}
+
+.btn {
+    background-color: $bg-darker;
+
+    &.btn-no-bg {
+        background-color: transparent;
+        &:active {
+            background-color: transparent;
+        }
+
+        &.active {
+            background-color: transparent;
+        }
+    }
+
+    &:active {
+        background-color: transparentize($piano-green, 0.7);
+    }
+
+    &.active {
+        background-color: transparentize($piano-green, 0.7);
+    }
+
+    padding: 0.25em 0.5em;
+
+    &:disabled {
+        opacity: 0.2;
+        &:active {
+            transform: none;
+        }
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+input {
+    background-color: $bg-darker;
+    padding: 0.25em 0.5em;
+
+    &:focus{
+        background-color: transparentize($piano-green, 0.7);
+        outline: none;
+    }
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 2em;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+
+    &:checked {
+        background-color: $piano-green;
+        color: $piano-light;
+
+        &::before {
+            content: "✓";
+            opacity: 1;
+        }
+    }
+    
+    &::before {
+        content: "-";
+        opacity: 0;
+        font-weight: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(1px);
+    }
+
+}
+
+select {
+    appearance: none;
+    background-color: $bg-darker;
+    color: $piano-dark;
+    border-radius: 0;
+    padding: 0.2em 0.5em;
+    cursor: pointer;
+    &:active{
+        background-color: transparentize($piano-green, 0.7);
+        outline: none;
+    }
+    &:focus {
+        outline: none;
+    }
+}
