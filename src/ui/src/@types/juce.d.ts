@@ -17,3 +17,5 @@ declare function juce_nextPreset();
 declare function juce_prevPreset();
 declare function juce_getAvailablePresets(reloadCache: boolean) : Promise<any>;
 declare function juce_getActivePreset() : Promise<Preset>;
+declare function juce_getConfig(key : string) : Promise<string>;
+declare function juce_setConfig(key : string, value: string);

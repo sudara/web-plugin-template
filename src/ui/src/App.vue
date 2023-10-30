@@ -11,10 +11,17 @@
             />
         </div>
         <div class="w-1/2">
+          <div class="h-1/2 flex justify-center items-center">
+            <input type="text" v-model="test">
+          </div>
+
+          <div class="h-1/2 w-full flex justify-center items-center">
           <Button
             :param="testParam"
             >
             </Button>
+          </div>
+
         </div>
 
         <Transition>
@@ -38,6 +45,7 @@ import Button from './components/controls/button/Button.vue';
 import Footer from './components/Footer.vue';
 import { usePluginInfoStore } from './store/info';
 import PresetPanel from './components/presets/PresetPanel.vue';
+import { onMounted, ref, watch } from 'vue';
 
 const parameterStore = useParameterStore();
 const infoStore = usePluginInfoStore();
@@ -49,6 +57,16 @@ infoStore.loadCurrentVersion();
 infoStore.loadPluginName();
 parameterStore.reloadParameters();
 presetStore.reloadPresets(true);
+
+let test = ref('');
+
+watch(test, () => {
+  juce_setConfig("test", test.value);
+});
+
+onMounted(async () => {
+  test.value = await juce_getConfig("test");
+})
 
 </script>
 

@@ -16,8 +16,8 @@
                     <PresetListCategory :category="category" :presets="presets" />
                 </div>
                 <div v-show="showPresetInput" class="ps-8">
-                    <input ref="pi" class="ps-5 btn btn-no-bg w-full text-left" @keyup.enter.native="savePreset"
-                    @keypress="onNameKeypress($event)" @keydown="onNameKeydown">
+                    <input ref="pi" class="btn btn-no-bg !bg-green !bg-opacity-50 ps-5 w-full text-left" @keyup.enter.native="savePreset"
+                    @keypress="onNameKeypress($event)" @keydown="onNameKeydown" @focusout="showPresetInput = false">
                 </div>
             </div>
         </div>
@@ -47,7 +47,6 @@ function savePreset() {
     pi.value.blur();
     pi.value.value = '';
 }
-
 
 function onNameKeypress (e : KeyboardEvent) {
     if (!pi.value) return;

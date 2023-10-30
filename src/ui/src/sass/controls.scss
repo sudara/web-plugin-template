@@ -50,8 +50,14 @@ button {
 }
 
 input {
-    background-color: $bg-darker;
+    //@apply shadow-md;
+    @apply bg-green;
+    @apply bg-opacity-70;
+    //background-color: $piano-green;
     padding: 0.25em 0.5em;
+
+    // @apply border-dark;
+    // @apply border-2;
 
     &:focus{
         background-color: transparentize($piano-green, 0.7);
