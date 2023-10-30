@@ -15,7 +15,7 @@ button {
 }
 
 .btn {
-    background-color: var(--bg-darker);
+    //background-color: var(--bg-darker);
 
     &.btn-no-bg {
         background-color: transparent;
@@ -28,13 +28,13 @@ button {
         }
     }
 
-    &:active {
-        background-color: transparentize($green, 0.7);
-    }
+    // &:active {
+    //     background-color: transparentize($green, 0.7);
+    // }
 
-    &.active {
-        background-color: transparentize($green, 0.7);
-    }
+    // &.active {
+    //     background-color: transparentize($green, 0.7);
+    // }
 
     padding: 0.25em 0.5em;
 

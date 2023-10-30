@@ -9,4 +9,5 @@ export interface Preset {
     path: string;
     name: string;
     paramStates: ParamState[],
+    favorite: boolean
 }

@@ -2,12 +2,8 @@
     position: relative;
     overflow: hidden;
 
-    & > *  {
-        transform: translateY(1px);
-    }
-
-
     &::before {
+        pointer-events: none;
         content: '';
         display: block;
         position: absolute;

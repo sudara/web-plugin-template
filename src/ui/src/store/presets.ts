@@ -5,7 +5,7 @@ export const usePresetStore = defineStore('presets', {
   state: () => {
     return {
       showPresetsPanel: false,
-      presets: <Map<string, Preset[]>>{},
+      presets: new Map<string, Preset[]>(),
       activePreset: <Preset>{
         name: "init"
       }
