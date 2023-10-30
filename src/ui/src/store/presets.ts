@@ -14,7 +14,6 @@ export const usePresetStore = defineStore('presets', {
   actions: {
     async reloadCurrentPreset() {
       this.activePreset = await juce_getActivePreset();
-      navigator.clipboard.writeText(JSON.stringify(this.activePreset));
     },
     async reloadPresets(reloadCache: boolean = false) {
       const presetsObj = await juce_getAvailablePresets(reloadCache);
