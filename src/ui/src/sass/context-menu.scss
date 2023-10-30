@@ -2,9 +2,9 @@
     & {
         //Overwrite the value of the default css variable here
         --mx-menu-backgroud: #{$bg};
-        --mx-menu-hover-backgroud: #{$piano-green};
-        --mx-menu-open-backgroud: #{$piano-green};
-        --mx-menu-open-hover-backgroud: #{$piano-green};
+        --mx-menu-hover-backgroud: #{var(--green)};
+        --mx-menu-open-backgroud: #{var(--green)};
+        --mx-menu-open-hover-backgroud: #{var(--green)};
         --mx-menu-placeholder-width: 0.5em; 
     }
 

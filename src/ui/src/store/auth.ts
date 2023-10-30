@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', {
 
             this.demoEndTime = new Date(new Date().getTime() + 1000 * demoTimeLeft);
 
-            console.log("auth", this.authorized);
+            console.log("demoFinished", this.demoFinished);
         },
         async tryAuthorize(serial: string, updateStore : boolean = true) : Promise<boolean> {
             const authorized = await juce_tryAuthorize(serial);

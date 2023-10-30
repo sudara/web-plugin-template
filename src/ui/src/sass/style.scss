@@ -25,12 +25,14 @@ html, body {
 }
 
 @font-face {
-  font-family: 'IngramMono';
+  font-family: 'MSPMincho';
   font-style: normal;
-  src: local('Opensans-Bold'), url(@/assets/fonts/IngramMono.woff) format('woff');
+  src: url(@/assets/fonts/MSPMincho.woff2) format('woff');
 }
 
 body {
+  font-family: MSPMincho;
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -38,8 +40,7 @@ body {
   -ms-user-select: none;
   user-select: none;
 
-  background-color: $piano-light;
-  font-family: IngramMono;
+  @apply bg-light;
 }
 
 .v-enter {

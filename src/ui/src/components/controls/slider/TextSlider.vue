@@ -58,10 +58,10 @@ const props = withDefaults(defineProps<Props>(), {
 @import "@/sass/variables";
 
 .slider {
-  background-color: $bg-darker;
+  background-color: var(--bg-darker);
   padding: 0.25em 0.5em;
   &:active {
-    background-color: transparentize($color: $piano-green, $amount: 0.7);
+    background-color: transparentize($color: var(--green), $amount: 0.7);
   }
 }
 

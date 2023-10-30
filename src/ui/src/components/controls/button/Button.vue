@@ -38,8 +38,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 @import "@/sass/variables";
 
-$slider-color: $piano-green;
-
 .button {
   min-width: 4em;
   aspect-ratio: 1/1;
@@ -47,16 +45,16 @@ $slider-color: $piano-green;
   border-radius: 50%;
   border-width: 3px;
   border-style: solid;
-  border-color: $slider-color;
+  border-color: var(--primary);
   position: relative;
   cursor: pointer;
 
   &.active {
-    background-color: $slider-color;
+    background-color: $primary;
     box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.1);
   }
   &.hover, &:active {
-    border-color: scale-color($slider-color, $saturation: -30%, $lightness: -30%);
+    border-color: scale-color($primary, $saturation: -30%, $lightness: -30%);
   }
   &:active {
     transform: translateY(5px);

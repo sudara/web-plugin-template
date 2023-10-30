@@ -1,12 +1,12 @@
 button {
-    color: $piano-dark;
+    color: theme("colors.dark");
 
     &:hover {
         text-decoration: underline;
     }
 
     &:active {
-        transform: translateY(5px);
+        transform: translateY(3px);
     }
 
     &.no-move:active {
@@ -15,7 +15,7 @@ button {
 }
 
 .btn {
-    background-color: $bg-darker;
+    background-color: var(--bg-darker);
 
     &.btn-no-bg {
         background-color: transparent;
@@ -29,11 +29,11 @@ button {
     }
 
     &:active {
-        background-color: transparentize($piano-green, 0.7);
+        background-color: transparentize($green, 0.7);
     }
 
     &.active {
-        background-color: transparentize($piano-green, 0.7);
+        background-color: transparentize($green, 0.7);
     }
 
     padding: 0.25em 0.5em;
@@ -53,14 +53,14 @@ input {
     //@apply shadow-md;
     @apply bg-green;
     @apply bg-opacity-70;
-    //background-color: $piano-green;
+    //background-color: $green;
     padding: 0.25em 0.5em;
 
     // @apply border-dark;
     // @apply border-2;
 
-    &:focus{
-        background-color: transparentize($piano-green, 0.7);
+    &:focus {
+        background-color: transparentize($green, 0.7);
         outline: none;
     }
 }
@@ -72,8 +72,8 @@ input[type="checkbox"] {
     cursor: pointer;
 
     &:checked {
-        background-color: $piano-green;
-        color: $piano-light;
+        background-color: $green;
+        color: theme("colors.light");
 
         &::before {
             content: "✓";
@@ -95,13 +95,13 @@ input[type="checkbox"] {
 
 select {
     appearance: none;
-    background-color: $bg-darker;
-    color: $piano-dark;
+    background-color: var(--bg-darker);
+    color: theme("colors.dark");
     border-radius: 0;
     padding: 0.2em 0.5em;
     cursor: pointer;
     &:active{
-        background-color: transparentize($piano-green, 0.7);
+        background-color: transparentize($green, 0.7);
         outline: none;
     }
     &:focus {

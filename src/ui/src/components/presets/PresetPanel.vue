@@ -41,7 +41,7 @@ function startSavePreset() {
 
 function savePreset() {
     if (!pi.value) return;
-    let name = pi.value.value.replace(/[^a-z0-9_]/gi, '');
+    let name = pi.value.value.replace(/[^a-z0-9_ ]/gi, '');
     juce_createPreset(name, "user");
     showPresetInput.value = false;
     pi.value.blur();

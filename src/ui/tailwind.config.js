@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     "./index.html",
@@ -9,14 +10,14 @@ module.exports = {
       colors: {
         transparent: 'transparent',
         current: 'currentColor',
-        white: '#ffffff',
-        light: '#EAE5DB',
-        dark: '#423b3b',
-        blue: '#bfccd2',
-        yellow: '#F1AC00',
-        green: '#83af80',
-        orange: '#cf8a44',
-        red: '#d86363',
+        light: 'var(--light)',
+        dark: 'var(--dark)',
+        blue: 'var(--blue)',
+        yellow: 'var(--yellow)',
+        green: 'var(--green)',
+        orange: 'var(--orange)',
+        red: 'var(--red)',
+        primary: 'var(--primary)',
       },
     }
   },

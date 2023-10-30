@@ -2,7 +2,10 @@
     <div>
         <button class="btn btn-no-bg w-full text-left hover:no-underline group" @click="expanded = !expanded">
             <h2 class="flex">
-                <div class="w-6" v-if="expanded">▼</div>
+                <div class="w-6 flex justify-center items-center" v-if="expanded">
+                    <vue-feather class="p-0 -translate-x-2 w-5 translate-y-0.5" 
+                    type="chevron-down" stroke-width="1"></vue-feather>
+                </div>
                 <div class="w-6" v-else>-</div>
                 <span class="group-hover:underline">{{ category }}</span>
             </h2>

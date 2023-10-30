@@ -1,12 +1,24 @@
-$piano-light: #EAE5DB;
-$piano-dark: #202020;
-$piano-blue: #bfccd2;
-$piano-yellow: #F1AC00;
-$piano-green: #83af80;
-$piano-orange: #cf8a44;
-$piano-red: #d86363;
+$light: #EAE5DB;
+$dark: #413939;
+$blue: #bfccd2;
+$yellow: #F1AC00;
+$green: #83af80;
+$orange: #cf8a44;
+$red: #d86363;
 
-$bg: $piano-light;
-$bg-darker: darken($piano-light, 5);
+$primary: $green;
 
-$slider-color: $piano-green;
+$bg: $light;
+$bg-darker: darken($light, 5);
+
+:root {
+    --light: #{$light};
+    --dark: #{$dark};
+    --blue: #{$blue};
+    --yellow: #{$yellow};
+    --green: #{$green};
+    --orange: #{$orange};
+    --red: #{$red};
+
+    --primary: #{$primary};
+}

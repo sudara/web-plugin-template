@@ -17,7 +17,12 @@
                 <span class="text-lg italic h-full bg-dark px-3">or</span>
             </div>
 
-            <button @click="startDemo" :disabled="authStore.demoStarted || demoStartSuccess" 
+            <button v-if="authStore.demoFinished" disabled class="btn w-full active:bg-light">
+                demo finished
+            </button>
+
+            <button v-else @click="startDemo" 
+            :disabled="demoStartSuccess"
             class="btn w-full disabled:bg-green disabled:opacity-75">
                 <span v-if="demoStartSuccess">demo started!</span>
                 <span v-else>start demo</span>

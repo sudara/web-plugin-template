@@ -224,7 +224,7 @@ async function onContextMenu(e: MouseEvent) {
   cursor:ns-resize;
 
   //border-radius: 100%;
-  //border: 3px solid $slider-color;
+  //border: 3px solid $primary;
   //overflow: hidden;
   &.square {
     aspect-ratio: 1/1;
@@ -240,7 +240,7 @@ input {
 }
 
 .corner-border::before {
-  $border-colour: scale-color($slider-color, $saturation: -10%, $lightness: -15%);
+  $border-colour: scale-color($primary, $saturation: -10%, $lightness: -15%);
   $border-width: 3px;
   $border-length: 13px;
   background:
@@ -268,7 +268,7 @@ input {
   width: 100%;
   height: 100%;
   display: block;
-  $border-colour: scale-color($slider-color, $saturation: -30%, $lightness: -40%);
+  $border-colour: scale-color($primary, $saturation: -30%, $lightness: -40%);
   $border-width: 3px;
   $border-length: 13px;
   background:
@@ -286,7 +286,7 @@ input {
 }
 
 .thumb {
-  background-color: $slider-color;
+  background-color: $primary;
   bottom: 0;
   left: 0;
   position: absolute;
@@ -298,7 +298,7 @@ input {
     height 0.1s cubic-bezier(0.19, 1, 0.22, 1),
     border-width 0.05s ease-in;
 
-  border-color: scale-color($slider-color, $saturation: -15%, $lightness: -10%);
+  border-color: scale-color($primary, $saturation: -15%, $lightness: -10%);
   border-style: solid;
   border-width: 0;
   width: 100%;
