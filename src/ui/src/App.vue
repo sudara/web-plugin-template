@@ -15,8 +15,9 @@
           </div>
 
           <div class="h-1/2 w-full flex justify-center items-center">
-            <Button :param="testParam">
-            </Button>
+            <ParameterButton class="w-full h-full border border-black" uid="bypass">
+              bypass
+            </ParameterButton>
           </div>
 
         </div>
@@ -43,9 +44,9 @@ import { useParameterStore } from './store/parameters';
 import { usePresetStore } from './store/presets';
 import { useAuthStore } from './store/auth';
 import ParameterSlider from './components/controls/slider/ParameterSlider.vue';
+import ParameterButton from './components/controls/button/ParameterButton.vue';
 import Parameter from './parameter/Parameter';
 import ParameterRange from './parameter/ParameterRange';
-import Button from './components/controls/button/Button.vue';
 import Footer from './components/Footer.vue';
 import { usePluginInfoStore } from './store/info';
 import PresetPanel from './components/presets/PresetPanel.vue';
@@ -62,8 +63,7 @@ const settingsStore = useSettingsStore();
 
 let testParam = new Parameter(new ParameterRange(0, 1, 1), "test");
 
-infoStore.loadCurrentVersion();
-infoStore.loadPluginName();
+infoStore.loadInfo();
 parameterStore.reloadParameters();
 presetStore.reloadPresets(true);
 authStore.loadAuthInfo();

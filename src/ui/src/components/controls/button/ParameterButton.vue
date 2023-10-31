@@ -1,24 +1,32 @@
 <template>
-    <Slider
-    v-if="parameter" 
-    v-model="parameter.value"
-    :range="parameter.range"
-    :unit="parameter.unit"
-    >
-    </Slider>
+    <ToggleButton v-if="parameter" 
+        :model-value="parameter.value == 1"
+        @update:model-value="v => {
+            if (parameter) parameter.value = v ? 1 : 0
+        }"
+        :class="toggleClassComputed">
+        <slot :toggleState="parameter.value == 1"></slot>
+    </ToggleButton>
 </template>
 
 <script setup lang="ts">
 import PluginParameter from '@/parameter/PluginParameter';
-import Slider from './Slider.vue';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useParameterStore } from '@/store/parameters';
+import ToggleButton from './ToggleButton.vue';
+import { param } from 'jquery';
 
 const parameterStore = useParameterStore();
 
 const props = defineProps<{
-    uid: string
+    uid: string,
+    toggleClass?: string
 }>();
+
+const toggleClassComputed = computed(() => {
+    if (!parameter.value) return '';
+    return parameter.value.value == 1 ? props.toggleClass : ''
+})
 
 let parameter = ref<PluginParameter | null>();
 

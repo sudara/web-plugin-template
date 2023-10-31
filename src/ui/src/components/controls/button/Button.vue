@@ -1,68 +1,14 @@
 <template>
-  <div class="h-full flex items-center justify-center">
-      <div class="button flex items-center justify-center" :class="{'active': getToggleState()}" ref="button">
-        <div class="w-min p-5">
-          <slot :toggleState="getToggleState()"></slot>
-
+    <button class="btn group flex justify-center items-center">
+        <div class="btn-content group-hover:underline group-active:translate-y-1
+         group-disabled:translate-y-0 group-disabled:opacity-40" :class="containerClass">
+            <slot></slot>
         </div>
-      </div>
-    </div>
+    </button>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import Parameter from '@/parameter/Parameter';
-
 const props = defineProps<{
-  param: Parameter
+    containerClass?: string
 }>();
-
-function getToggleState() : boolean { 
-  return props.param.value == 1; 
-}
-
-function setToggleState(val: boolean) {
-  props.param.value = val ? 1 : 0;
-}
-
-let button= ref<HTMLElement|null>(null);
-
-onMounted(() => {
-  button.value?.addEventListener('mousedown', (e) => {
-    setToggleState(!getToggleState())
-  });
-})
-
 </script>
-
-<style lang="scss" scoped>
-@import "@/sass/variables";
-
-.button {
-  min-width: 4em;
-  aspect-ratio: 1/1;
-
-  border-radius: 50%;
-  border-width: 3px;
-  border-style: solid;
-  border-color: var(--primary);
-  position: relative;
-  cursor: pointer;
-
-  &.active {
-    background-color: $primary;
-    box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.1);
-  }
-  &.hover, &:active {
-    border-color: scale-color($primary, $saturation: -30%, $lightness: -30%);
-  }
-  &:active {
-    transform: translateY(5px);
-  }
-
-  transition:   border-color 0.08s ease-in-out,
-                background-color 0.03s ease-out,
-                transform 0.03s ease-in-out;
-}
-
-</style>

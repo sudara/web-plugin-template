@@ -2,7 +2,7 @@
 #include "BinaryData.h"
 
 TemplateAudioProcessor::TemplateAudioProcessor()
-        : WebProcessor(getDefaultProperties(), PROJECT_VERSION, "template"),
+        : WebProcessor(getDefaultProperties(), PROJECT_VERSION, PROJECT_ID),
 #if JUCE_DEBUG
           paramLoader(*this, juce::File(
                   juce::String(SRCPATH) + "/Parameters.yaml"))
@@ -12,21 +12,25 @@ TemplateAudioProcessor::TemplateAudioProcessor()
 {
     juce::ignoreUnused(paramLoader);
     WebProcessor::init();
+
+    bypassGain.reset(250);
 }
 
 TemplateAudioProcessor::~TemplateAudioProcessor() {
 }
 
 void TemplateAudioProcessor::prepareToPlay(double sampleRate, int blockSize) {
-    ProcessorBase::prepareToPlay(sampleRate, blockSize);
+    WebProcessor::prepareToPlay(sampleRate, blockSize);
 }
 
-void TemplateAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
+void TemplateAudioProcessor::process(juce::AudioBuffer<float>& buffer,
                                          juce::MidiBuffer& midiMessages)
 
 {
-    imagiro::Processor::processBlock(buffer, midiMessages);
     juce::ignoreUnused(midiMessages);
+
+    auto gain = juce::Decibels::decibelsToGain(getParameter("gain")->getUserValue());
+    buffer.applyGain(gain);
 
     if (!auth.isAuthorized()) return;
 

@@ -5,12 +5,17 @@ export const usePluginInfoStore = defineStore('info', {
   state: () => {
     return {
       pluginVersion: "",
-      pluginName: ""
+      pluginName: "",
+      isUpdateAvailable: <string | null>(null)
     }
   },
   actions: {
-    async loadCurrentVersion() {
+    async loadInfo() {
+      Promise.all([this.loadVersion(), this.loadPluginName()]);
+    },
+    async loadVersion() {
       this.pluginVersion = await juce_getCurrentVersion();
+      this.isUpdateAvailable = await juce_getIsUpdateAvailable();
     },
     async loadPluginName() {
       this.pluginName = await juce_getPluginName();

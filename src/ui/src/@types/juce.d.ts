@@ -9,6 +9,8 @@ declare function juce_getDisplayValue(id : string, value: number);
 // Info
 declare function juce_getCurrentVersion() : Promise<string>;
 declare function juce_getPluginName() : Promise<string>;
+declare function juce_getIsUpdateAvailable() : Promise<string | null>;
+declare function juce_revealUpdate() : Promise<null>;
 
 // File IO 
 declare function juce_requestFileChooser(filePatternsAllowed : string) : void;
@@ -23,6 +25,8 @@ declare function juce_getActivePreset() : Promise<Preset>;
 declare function juce_favoritePreset(path: string, shouldFavorite: boolean = true) : Promise<void>;
 declare function juce_deletePreset(path: string) : Promise<void>;
 declare function juce_revealPresetsFolder() : Promise<void>;
+declare function juce_getCurrentSettingsAsPreset() : Promise<Preset>;
+declare function juce_setPresetFromString(presetJSON: Preset) : Promise<void>;
 
 // Config
 declare function juce_getConfig(key : string) : Promise<string>;

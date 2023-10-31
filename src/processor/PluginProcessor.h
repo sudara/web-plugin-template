@@ -13,7 +13,7 @@ public:
     ~TemplateAudioProcessor() override;
 
     void prepareToPlay(double sampleRate, int blockSize) override;
-    void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void process(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     bool isResizable() override { return true; }
     juce::Point<int> getResizeMin() override { return {200, 200}; }
@@ -24,4 +24,5 @@ public:
 
 private:
     ParameterLoader paramLoader;
+    juce::SmoothedValue<float> bypassGain;
 };

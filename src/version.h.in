@@ -2,4 +2,4 @@
 #define PROJECT_NAME "@PROJECT_NAME@"
 #define PROJECT_VERSION  "@PROJECT_VERSION@"
 #define SRCPATH "@CMAKE_CURRENT_SOURCE_DIR@/src"
-#define PROJECT_ID "@PluginName@"
+#define PROJECT_ID "autochroma"

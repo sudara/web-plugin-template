@@ -1,27 +1,41 @@
 <template>
     <div class="relative">
         <div class="bg-light flex flex-col h-full w-full">
-            <div class="w-full px-1 flex justify-between border-b border-dark">
-                <div>
-                    <button class="btn btn-no-bg" @click="startSavePreset">
+            <div class="w-full px-2 flex justify-between border-b border-dark h-[30px]">
+                <div class="flex gap-2">
+                    <Button @click="startSavePreset"
+                    title="create a new preset">
                         <vue-feather type="plus" class="w-4 translate-y-0.5"></vue-feather>
-                    </button>
-                    <button class="btn btn-no-bg" @click="revealPresets">
+                    </Button>
+                    <Button  @click="revealPresets"
+                    title="reveal presets folder">
                         <vue-feather type="folder" class="w-4 translate-y-0.5"></vue-feather>
-                    </button>
+                    </Button>
                 </div>
-                <div class="flex items-">
-                    <button class="btn flex items-center"
+                <div class="flex items-center">
+                    <Button class="!px-1" @click="copyPreset"
+                    title="copy current settings to clipboard">
+                        copy
+                    </Button>
+                    |
+                    <Button class="!px-1" @click="pastePreset"
+                    title="paste settings from clipboard">
+                        paste
+                    </Button>
+                </div>
+                <div class="flex gap-2 items-center justify-center">
+                    <Button class="translate-y-0.5"
+                        title="show only favorite presets"
                         @click="showFavorites = !showFavorites">
                         <vue-feather type="heart" class="w-4" 
                         :fill="showFavorites ? 'var(--red)' : 'none'" 
                         :stroke="showFavorites ? 'var(--red)' : 'var(--dark)'" 
                         />
-                    </button>
-                    <button class="btn btn-no-bg" @click="chooseRandomPreset"
-                    title="pick a random preset">
+                    </Button>
+                    <Button @click="chooseRandomPreset"
+                    title="pick a random preset (from shown presets)">
                         <vue-feather type="shuffle" class="w-4 translate-y-0.5"></vue-feather>
-                    </button>
+                    </Button>
                 </div>
             </div>
             <div class="shadow-top grow">
@@ -29,8 +43,8 @@
                     <div v-for="[category, presets] of presetsToShow">
                         <PresetListCategory ref="categories" :category="category" :presets="presets" @delete-preset="startDeletePreset" />
                     </div>
-                    <div v-show="showPresetInput" class="ps-8">
-                        <input ref="pi" class="btn btn-no-bg !bg-green !bg-opacity-50 ps-5 w-full text-left"
+                    <div v-show="showPresetInput">
+                        <input ref="pi" class="ps-8 btn !bg-green w-full text-left"
                             @keyup.enter.native="savePreset" @keypress="onNameKeypress($event)" @keydown="onNameKeydown"
                             @focusout="showPresetInput = false">
                     </div>
@@ -39,7 +53,7 @@
         </div>
         <Transition>
             <div class="absolute top-0 bottom-0 left-0 right-0 z-50 
-            flex justify-center items-center backdrop-blur-sm" 
+            flex justify-center items-center backdrop-blur-md" 
             v-if="presetToDelete" 
             @click="presetToDelete = null"
             :class="{'pointer-events-none': presetToDelete == null}">
@@ -50,10 +64,10 @@
                         <span class="font-bold"> {{ presetToDelete.name }}? </span>
                     </div>
                     <div class="flex items-center justify-evenly mt-3 gap-2">
-                        <button class="btn grow border border-dark"
-                        @click="presetToDelete = null">cancel</button>
-                        <button class="btn grow !bg-red border border-dark"
-                        @click="commitDeletePreset">delete</button>
+                        <Button class="btn grow border border-dark"
+                        @click="presetToDelete = null">cancel</Button>
+                        <Button class="btn grow !bg-red border border-dark"
+                        @click="commitDeletePreset">delete</Button>
                     </div>
                 </div>
             </div>
@@ -66,6 +80,8 @@ import { Preset } from '@/presets/Preset';
 import { usePresetStore } from '@/store/presets';
 import { computed, nextTick, ref, toRaw } from 'vue';
 import PresetListCategory from './PresetListCategory.vue';
+import { Buffer } from "buffer";
+import Button from '../controls/button/Button.vue';
 
 const showPresetInput = ref(false);
 const pi = ref<HTMLInputElement>();
@@ -111,7 +127,7 @@ function onNameKeypress(e: KeyboardEvent) {
         if (pi.value) pi.value.value = '';
     }
 
-    if (pi.value?.value.length > 18) {
+    if (pi.value?.value.length > 25) {
         e.preventDefault();
         return false;
     }
@@ -159,6 +175,21 @@ function chooseRandomPreset() {
     const chosenPreset = flatPresets[index];
 
     juce_loadPreset(chosenPreset.path);
+}
+
+async function copyPreset() {
+    const preset = await juce_getCurrentSettingsAsPreset();
+    const json = JSON.stringify(preset);
+    const encoded = Buffer.from(json).toString("base64");
+    console.log(encoded);
+    navigator.clipboard.writeText(encoded);
+}
+
+async function pastePreset() {
+    const encoded = await navigator.clipboard.readText();
+    const jsonString = Buffer.from(encoded, "base64").toString();
+    const preset = JSON.parse(jsonString);
+    juce_setPresetFromString(preset);
 }
 
 </script>

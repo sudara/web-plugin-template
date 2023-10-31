@@ -1,3 +1,4 @@
+import { usePluginInfoStore } from './store/info';
 import { useParameterStore } from './store/parameters';
 import { usePresetStore } from './store/presets';
 
@@ -11,6 +12,9 @@ const ui = {
     },
     reloadPresets: () => {
         usePresetStore().reloadPresets();
+    },
+    updateDiscovered: () => {
+        usePluginInfoStore().loadVersion();
     }
 }
 

@@ -1,27 +1,31 @@
 <template>
-    <div class="flex justify-between h-full border-dark border-x"
+    <div class="flex justify-between h-full border-dark border-x w-[40%]"
             :class="{'bg-dark': presetStore.showPresetsPanel}"
     >
         <div class=" border-black">
-            <button class="btn btn-no-bg h-full" :class="{'text-light' : presetStore.showPresetsPanel}" 
-            @click="prevPreset">&lt;</button>
+            <Button class="btn btn-no-bg h-full px-2" :class="{'text-light' : presetStore.showPresetsPanel}" 
+            @click="prevPreset" title="load previous preset">&lt;</Button>
         </div>
         <div class="grow overflow-clip w-full">
-            <button class="btn btn-no-bg w-full overflow-ellipsis truncate text-base h-full -translate-y-0.5" 
+            <Button class="h-full w-full" 
+            container-class="w-full truncate text-base h-full" 
+
+            title="presets"
                     @click="presetStore.showPresetsPanel = !presetStore.showPresetsPanel"
                     :class="{'text-light': presetStore.showPresetsPanel}">
                     {{ presetStore.activePreset ? presetStore.activePreset.name : "init" }}
-            </button>
+            </Button>
         </div>
         <div class=" border-black">
-            <button class="btn btn-no-bg h-full" :class="{'text-light' : presetStore.showPresetsPanel}" 
-            @click="nextPreset">&gt;</button>
+            <Button class="btn btn-no-bg h-full px-2" :class="{'text-light' : presetStore.showPresetsPanel}" 
+            @click="nextPreset" title="load next preset">&gt;</Button>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { usePresetStore } from '@/store/presets';
+import Button from '../controls/button/Button.vue';
 
 const presetStore = usePresetStore();
 

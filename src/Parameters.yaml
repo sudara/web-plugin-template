@@ -1,3 +1,8 @@
+bypass:
+  name: "bypass"
+  type: toggle
+  default: 0
+
 gain:
   name: "gain"
   type: db
