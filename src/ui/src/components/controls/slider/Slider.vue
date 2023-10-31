@@ -36,6 +36,7 @@ interface Props {
   decimals?: number,
   unit?: string,
   updateAlways?: boolean
+  shadow?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -47,7 +48,8 @@ const props = withDefaults(defineProps<Props>(), {
   defaultVal: () => 0,
   decimals: () => 2,
   unit: () => "",
-  updateAlways: () => true
+  updateAlways: () => true,
+  shadow: () => false
 });
 
 const emit = defineEmits(['update:modelValue', 'mousedown', 'mouseup'])
@@ -94,7 +96,7 @@ function inputValueChange(e: Event) {
 
 let thumbStyle = computed(() => {
   const maxShadow = 0.2;
-  let shadow = value01.value * maxShadow;
+  let shadow = props.shadow ? value01.value * maxShadow : 0;
 
   return {
     height: + value01.value * 100 + "%",

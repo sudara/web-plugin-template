@@ -6,10 +6,10 @@
             <div class="absolute bottom-2 flex justify-between items-end w-full italic opacity-80 text-xs px-2">
                 <div> {{ info.pluginName }} v{{ info.pluginVersion }} </div>
                 <div v-if="info.isUpdateAvailable" class="px-1">
-                    <button class="text-orange italic" @click="revealUpdate"
+                    <Button class="text-orange italic" @click="revealUpdate"
                     title="download update (opens browser)">
                         update available! ({{ info.isUpdateAvailable }})
-                    </button>
+                </Button>
                 </div>
             </div>
         </div>
@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import { usePluginInfoStore } from '@/store/info';
 import { useSettingsStore } from '@/store/settings';
+import Button from '../controls/button/Button.vue';
 
 const info = usePluginInfoStore();
 const settings = useSettingsStore();

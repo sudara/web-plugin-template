@@ -8,7 +8,7 @@
         </div>
         <div class="grow overflow-clip w-full">
             <Button class="h-full w-full" 
-            container-class="w-full truncate text-base h-full" 
+            container-class="w-full truncate text-base h-full translate-y-0.5" 
 
             title="presets"
                     @click="presetStore.showPresetsPanel = !presetStore.showPresetsPanel"

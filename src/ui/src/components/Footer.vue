@@ -9,7 +9,7 @@
                 <PresetToolbar class="w-[40%] mx-auto" />
             </div>
             <div class="absolute right-0 top-0 bottom-0 flex justify-start items-center 
-            border-l border-dark">
+            ">
                 <Button 
                 @click="settings.showSettings = !settings.showSettings"
                 :class="{'!bg-dark !text-light': settings.showSettings}"
@@ -26,7 +26,8 @@
                 </Button>
 
                 <ParameterButton class="!p-0 h-full flex justify-center items-center" uid="bypass" v-slot="slot"
-                toggleClass="bg-red text-light">
+                toggleClass="bg-red text-light"
+                title="bypass">
                     <div class="px-2 h-full flex justify-center items-center">
                         <vue-feather type="power" class="h-full w-4"/>
                     </div>

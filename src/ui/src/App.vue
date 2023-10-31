@@ -6,20 +6,9 @@
       <div class="content grow flex relative">
         <!-- main content -->
 
-        <div class="w-1/2 p-3">
-          <ParameterSlider class="w-full h-full" uid="gain" />
-        </div>
-        <div class="w-1/2 p-2">
-          <div class="h-1/2 flex justify-center items-center w-full">
-            <input type="text" v-model="test" class="w-full max-w-md">
-          </div>
-
-          <div class="h-1/2 w-full flex justify-center items-center">
-            <ParameterButton class="w-full h-full border border-black" uid="bypass">
-              bypass
-            </ParameterButton>
-          </div>
-
+        <div class="w-full border relative p-3 flex flex-col">
+          <!-- <h1 class="text-center mb-3">gain</h1> -->
+          <ParameterSlider class="w-full mx-auto h-full grow" uid="gain" />
         </div>
 
         <Transition>
@@ -33,6 +22,7 @@
             <SettingsPanel class="w-full h-full" />
           </div>
         </Transition>
+
       </div>
     </Transition>
     <Footer class="bg-light z-20" />

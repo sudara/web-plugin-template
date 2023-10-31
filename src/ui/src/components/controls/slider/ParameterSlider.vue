@@ -29,6 +29,7 @@ if (!parameter.value) {
     console.log("parameter not found");
     let unwatch = watch(parameterStore.parameters, () => {
         parameter.value = parameterStore.parameters.get(props.uid);
+        console.log(parameter);
         unwatch();
     });
 }
