@@ -1,7 +1,7 @@
 <template>
     <ToggleButton v-if="parameter" 
         :model-value="parameter.value == 1"
-        @update:model-value="v => {
+        @update:model-value="(v: boolean) => {
             if (parameter) parameter.value = v ? 1 : 0
         }"
         :class="toggleClassComputed">

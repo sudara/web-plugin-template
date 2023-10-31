@@ -14,6 +14,8 @@ declare function juce_revealUpdate() : Promise<null>;
 
 // File IO 
 declare function juce_requestFileChooser(filePatternsAllowed : string) : void;
+declare function juce_copyToClipboard(string: string) : Promise<void>;
+declare function juce_getTextFromClipboard() : Promise<string>;
 
 // Presets
 declare function juce_createPreset(name: string, category: string);

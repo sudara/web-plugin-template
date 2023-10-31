@@ -182,11 +182,11 @@ async function copyPreset() {
     const json = JSON.stringify(preset);
     const encoded = Buffer.from(json).toString("base64");
     console.log(encoded);
-    navigator.clipboard.writeText(encoded);
+    juce_copyToClipboard(encoded);
 }
 
 async function pastePreset() {
-    const encoded = await navigator.clipboard.readText();
+    const encoded = await juce_getTextFromClipboard();
     const jsonString = Buffer.from(encoded, "base64").toString();
     const preset = JSON.parse(jsonString);
     juce_setPresetFromString(preset);
