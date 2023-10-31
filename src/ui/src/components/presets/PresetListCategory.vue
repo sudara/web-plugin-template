@@ -56,6 +56,11 @@ const props = defineProps<{
     presets: Preset[]
 }>();
 
+defineExpose({
+    expanded,
+    presets: props.presets
+});
+
 const emit = defineEmits(['deletePreset']);
 
 function loadPreset(p : Preset) {

@@ -6,7 +6,7 @@
                     <button class="btn btn-no-bg" @click="startSavePreset">
                         <vue-feather type="plus" class="w-4 translate-y-0.5"></vue-feather>
                     </button>
-                    <button class="btn btn-no-bg">
+                    <button class="btn btn-no-bg" @click="revealPresets">
                         <vue-feather type="folder" class="w-4 translate-y-0.5"></vue-feather>
                     </button>
                 </div>
@@ -18,7 +18,8 @@
                         :stroke="showFavorites ? 'var(--red)' : 'var(--dark)'" 
                         />
                     </button>
-                    <button class="btn btn-no-bg">
+                    <button class="btn btn-no-bg" @click="chooseRandomPreset"
+                    title="pick a random preset">
                         <vue-feather type="shuffle" class="w-4 translate-y-0.5"></vue-feather>
                     </button>
                 </div>
@@ -26,7 +27,7 @@
             <div class="shadow-top grow">
                 <div class="overflow-scroll px-3 py-2 h-full">
                     <div v-for="[category, presets] of presetsToShow">
-                        <PresetListCategory :category="category" :presets="presets" @delete-preset="startDeletePreset" />
+                        <PresetListCategory ref="categories" :category="category" :presets="presets" @delete-preset="startDeletePreset" />
                     </div>
                     <div v-show="showPresetInput" class="ps-8">
                         <input ref="pi" class="btn btn-no-bg !bg-green !bg-opacity-50 ps-5 w-full text-left"
@@ -70,6 +71,8 @@ const showPresetInput = ref(false);
 const pi = ref<HTMLInputElement>();
 const presetStore = usePresetStore();
 const presetToDelete = ref<Preset | null>(null);
+
+const categories = ref<typeof PresetListCategory[]>([]);
 
 const showFavorites = ref(false);
 
@@ -138,6 +141,24 @@ function commitDeletePreset() {
     juce_deletePreset(presetToDelete.value.path);
     presetStore.reloadPresets();
     presetToDelete.value = null;
+}
+
+function revealPresets() {
+    juce_revealPresetsFolder();
+}
+
+function chooseRandomPreset() {
+    const flatPresets = <Preset[]>[];
+    for (const cat of categories.value) {
+        if (cat.expanded) {
+            flatPresets.push(...cat.presets);
+        }
+    }
+
+    const index = Math.floor(Math.random()*flatPresets.length);
+    const chosenPreset = flatPresets[index];
+
+    juce_loadPreset(chosenPreset.path);
 }
 
 </script>

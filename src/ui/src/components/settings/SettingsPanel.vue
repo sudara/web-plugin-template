@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center p-8">
+    <div class="flex justify-center items-center p-8 backdrop-blur-sm">
         <div class="relative bg-light w-full h-full border py-2 border-dark text-center shadow-xl">
             <h1 class="text-center">settings</h1>
 

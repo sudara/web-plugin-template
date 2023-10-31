@@ -22,6 +22,7 @@ declare function juce_getAvailablePresets(reloadCache: boolean) : Promise<any>;
 declare function juce_getActivePreset() : Promise<Preset>;
 declare function juce_favoritePreset(path: string, shouldFavorite: boolean = true) : Promise<void>;
 declare function juce_deletePreset(path: string) : Promise<void>;
+declare function juce_revealPresetsFolder() : Promise<void>;
 
 // Config
 declare function juce_getConfig(key : string) : Promise<string>;
