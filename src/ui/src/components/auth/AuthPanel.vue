@@ -13,20 +13,17 @@
             </div>
             <p :class="{'opacity-100': authSuccess}" class="opacity-0 text-center italic">success!</p>
 
-            <div class="w-full h-[15px] border-b border-light text-center mb-12">
+            <div class="w-full h-[15px] border-b border-light text-center mb-12" 
+            v-if="!authStore.demoStarted">
                 <span class="text-lg italic h-full bg-dark px-3">or</span>
             </div>
 
-            <button v-if="authStore.demoFinished" disabled class="btn w-full active:bg-light">
-                demo finished
-            </button>
-
-            <button v-else @click="startDemo" 
+            <Button v-if="!authStore.demoStarted" @click="startDemo" 
             :disabled="demoStartSuccess"
-            class="btn w-full disabled:bg-green disabled:opacity-75">
+            class="py-1 w-full disabled:italic">
                 <span v-if="demoStartSuccess">demo started!</span>
                 <span v-else>start demo</span>
-            </button>
+            </Button>
 
         </div>
 
@@ -36,6 +33,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
 import { onMounted, ref, watch } from 'vue';
+import Button from "../controls/button/Button.vue";
 
 const authStore = useAuthStore();
 const serial = ref();
