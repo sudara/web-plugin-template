@@ -122,7 +122,7 @@ jobs:
           pip install argparse
           pip install pyyaml
           pip install requests
-          python scripts/download-resources.py -p ${{ github.event.inputs.product }} --delete
+          python scripts/download-resources.py -p ${{ env.PLUGIN_NAME }} --delete
 
       - name: Package
         run: |
