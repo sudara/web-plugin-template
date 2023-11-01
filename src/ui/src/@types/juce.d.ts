@@ -42,3 +42,6 @@ declare function juce_getDemoFinished() : Promise<boolean>;
 declare function juce_getDemoTimeLeftSeconds() : Promise<number>;
 declare function juce_startDemo() : Promise<void>;
 declare function juce_tryAuthorize(serial : string) : Promise<boolean>;
+
+// Misc
+declare function juce_setWindowSize(x: number, y: number) : Promise<void>;
