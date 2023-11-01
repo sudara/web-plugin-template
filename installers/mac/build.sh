@@ -3,14 +3,6 @@
 REBUILD=true
 NOTARIZE=true
 
-if [ -z "$1" ]
-  then
-    echo "No target supplied"
-    exit 1
-fi
-
-TARGET=$1
-shift
 BUILD_TYPE=$1
 if [ -z "$BUILD_TYPE" ]; then
   BUILD_TYPE=RelWithDebInfo
@@ -50,10 +42,13 @@ if [ $REBUILD = true ]
     echo "Rebuilding..."
     mkdir -p build
     cmake -B ./build -G Ninja -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-    cmake --build ./build --target "${TARGET}_All" --config "${BUILD_TYPE}" --parallel 4
+    cmake --build ./build --config "${BUILD_TYPE}" --parallel 4
 fi
 
-rm -rf "bin/${TARGET}"
-mkdir -p "bin/${TARGET}"
-rm -rf "build/plugins/${TARGET}/${TARGET}_artefacts/${BUILD_TYPE}/JuceLibraryCode"
-cp -r "build/plugins/${TARGET}/${TARGET}_artefacts/${BUILD_TYPE}" "bin/${TARGET}"
+# read in PLUGIN_NAME from env
+source .env
+
+rm -rf "bin/"
+mkdir -p "bin/"
+rm -rf "build/${PLUGIN_NAME}_artefacts/${BUILD_TYPE}/JuceLibraryCode"
+cp -r "build/${PLUGIN_NAME}_artefacts/${BUILD_TYPE}/" "bin"

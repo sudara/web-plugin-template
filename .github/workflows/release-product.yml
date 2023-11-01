@@ -1,0 +1,153 @@
+name: product-release-version
+
+on: workflow_dispatch
+
+env:
+  BUILD_TYPE: RelWithDebInfo
+  CMAKE_BUILD_PARALLEL_LEVEL: 3 # Use up to 3 cpus to build juceaide, etc
+
+jobs:
+#  build_plugin_win:
+#    name: build windows plugin binaries
+#    runs-on: windows-latest
+#
+#    steps:
+#      - name: Configure build for amd64
+#        uses: ilammy/msvc-dev-cmd@v1
+#        with:
+#          arch: x64
+#
+#      - name: Install ccache
+#        shell: bash
+#        run: choco install ccache
+#
+#      - uses: actions/checkout@v3
+#        with:
+#          ssh-key: '${{ secrets.sshkey }}'
+#
+#      - name: Setup python
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#
+#      - name: Download large resources --wait
+#        run: |
+#          pip install argparse
+#          pip install pyyaml
+#          pip install requests
+#          python scripts/download-resources.py -p ${{ github.event.inputs.product }} --delete
+#
+#      - name: ccache
+#        uses: hendrikmuhs/ccache-action@main
+#        with:
+#          key: win
+#          variant: sccache
+#
+#      - name: Export version variable
+#        shell: bash
+#        run: export VERSION=${{github.event.inputs.version}}
+#
+#      - name: Configure
+#        shell: bash
+#        run: cmake -B ./build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+#
+#      - name: Build
+#        shell: bash
+#        run: cmake --build ./build --target "${{github.event.inputs.product}}_All" --config ${{ env.BUILD_TYPE }} --parallel 4
+#
+#      - name: Package
+#        run: |
+#          iscc "installers\win\installer.iss" /DPluginName=${{github.event.inputs.product}} /DVersion=${{ github.event.inputs.version }}
+#          mv installers/win/Output ./win
+#
+#      - name: Archive Release
+#        uses: thedoctor0/zip-release@0.7.1
+#        with:
+#          type: 'zip'
+#          filename: '${{ github.event.inputs.product }}-win-${{ github.event.inputs.version }}.zip'
+#          path: "win"
+#          directory: "./"
+#
+#      - name: Upload to DO
+#        uses: BetaHuhn/do-spaces-action@v2
+#        with:
+#          access_key: ${{ secrets.SPACES_ACCESS_KEY}}
+#          secret_key: ${{ secrets.SPACES_SECRET_KEY }}
+#          space_name: ${{ secrets.SPACES_SPACE_NAME }}
+#          space_region: ${{ secrets.SPACES_SPACE_REGION }}
+#          source: ./${{github.event.inputs.product}}-win-${{ github.event.inputs.version }}.zip
+#          out_dir: imagiro
+
+  build_plugin_mac:
+    name: build macOS plugin binaries
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ssh-key: '${{ secrets.sshkey }}'
+          submodules: 'true'
+
+      - name: Install macOS Deps
+        run: brew install ninja osxutils
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Download large resources
+        run: |
+          pip install argparse
+          pip install pyyaml
+          pip install requests
+          python scripts/download-resources.py -p ${{ github.event.inputs.product }} --delete
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.1
+        with:
+          key: macos
+
+      - name: Setup temporary keychain and add application signing certificate
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          keychain: temp
+          p12-file-base64: ${{ secrets.APPLE_CERTIFICATES }}
+          p12-password: ${{ secrets.APPLE_CERTIFICATE_PW }}
+
+      - name: Read in .env from CMake # see GitHubENV.cmake
+        shell: bash
+        run: |
+          cat .env # show us the config
+          cat .env >> $GITHUB_ENV # pull in our PRODUCT_NAME, etc
+
+      - name: Build
+        run: ${{github.workspace}}/installers/mac/build.sh
+
+      - name: Package
+        run: |
+          mkdir ./output
+          ${{github.workspace}}/installers/mac/package.sh ./output
+
+      - name: Upload to DO
+        uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.SPACES_ACCESS_KEY}}
+          secret_key: ${{ secrets.SPACES_SECRET_KEY }}
+          space_name: ${{ secrets.SPACES_SPACE_NAME }}
+          space_region: ${{ secrets.SPACES_SPACE_REGION }}
+          source: output/${{env.PLUGIN_NAME}}-macOS-${{ env.VERSION }}.dmg
+          out_dir: imagiro
+
+  release_plugins:
+    name: update imagi.ro version
+    needs:
+      - build_plugin_mac
+#      - build_plugin_win
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create new version
+        run: |
+          curl -d "key=${{ secrets.IMAGIRO_CI_KEY }}&version=${{ env.VERSION }}&slug=${{ env.PLUGIN_NAME }}" \
+          -H "Content-Type: application/x-www-form-urlencoded" \
+          -X POST https://imagi.ro/api/versions/new

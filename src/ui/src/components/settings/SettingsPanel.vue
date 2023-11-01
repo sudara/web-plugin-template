@@ -4,7 +4,14 @@
             <h1 class="text-center">settings</h1>
 
             <div class="absolute bottom-2 flex justify-between items-end w-full italic opacity-80 text-xs px-2">
-                <div> {{ info.pluginName }} v{{ info.pluginVersion }} </div>
+                <div class="select-text"> 
+                    <div>
+                        {{ info.pluginName }} v{{ info.pluginVersion }} ({{ info.platform }})
+                        <span v-if="info.isDebug" class="opacity-50 pe-1">
+                             - {{ info.debugVersionString }}
+                        </span>
+                    </div>
+                </div>
                 <div v-if="info.isUpdateAvailable" class="px-1">
                     <Button class="text-orange italic" @click="revealUpdate"
                     title="download update (opens browser)">

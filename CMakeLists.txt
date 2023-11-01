@@ -1,25 +1,22 @@
-set(PluginName template)
-set(PluginCode itml)
-set(Version 0.1)
-
 cmake_minimum_required(VERSION 3.16)
+set (CMAKE_CXX_STANDARD 20)
+
+# CHANGE ME
+set(PluginName template)
+set(PluginCode Itml)
 
 project("${PluginName}")
 
-set (CMAKE_CXX_STANDARD 20)
+# pull in version
+include(cmake/CMakeVersion.cmake)
+set(Version ${CURRENT_VERSION})
 
 include(cmake/CPM.cmake)
-
-# Compile commands
-# useful for some IDEs like VSCode
-# set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
-
 set(CPM_SOURCE_CACHE "cmake/cache/")
 
 if (WIN32)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
-
 
 # Minimum macOS target
 if(APPLE)
@@ -97,6 +94,7 @@ target_link_libraries("${PluginName}"
         yaml-cpp
         imagiro_webview
         imagiro_processor
+        timestamp
         PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
@@ -105,3 +103,6 @@ target_link_libraries("${PluginName}"
 target_include_directories("${PluginName}" PUBLIC
         "${PROJECT_BINARY_DIR}"
         )
+
+# pass config to github actions
+include(cmake/GithubEnv.cmake)

@@ -11,6 +11,9 @@ declare function juce_getCurrentVersion() : Promise<string>;
 declare function juce_getPluginName() : Promise<string>;
 declare function juce_getIsUpdateAvailable() : Promise<string | null>;
 declare function juce_revealUpdate() : Promise<null>;
+declare function juce_getIsDebug() : Promise<boolean>;
+declare function juce_getDebugVersionString() : Promise<string>;
+declare function juce_getPlatform() : Promise<string>;
 
 // File IO 
 declare function juce_requestFileChooser(filePatternsAllowed : string) : void;

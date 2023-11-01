@@ -64,15 +64,15 @@
                         <span class="font-bold"> {{ presetToDelete.name }}? </span>
                     </div>
                     <div class="flex items-center justify-evenly mt-3 gap-2">
-                        <Button class="btn grow border border-dark"
+                        <Button class="btn grow border border-dark py-2"
                         @click="presetToDelete = null">cancel</Button>
-                        <Button class="btn grow !bg-red border border-dark"
+                        <Button class="btn grow !bg-red border border-dark py-2"
                         @click="commitDeletePreset">delete</Button>
                     </div>
                 </div>
             </div>
         </Transition>
-</div>
+    </div>
 </template>
 
 <script setup lang="ts">
