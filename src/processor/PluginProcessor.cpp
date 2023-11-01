@@ -13,8 +13,6 @@ TemplateAudioProcessor::TemplateAudioProcessor()
     juce::ignoreUnused(paramLoader);
     WebProcessor::init();
 
-    bypassGain.reset(250);
-
     gainParam = getParameter("gain");
 }
 
