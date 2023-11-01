@@ -15,6 +15,10 @@ const ui = {
     },
     updateDiscovered: () => {
         usePluginInfoStore().loadVersion();
+    },
+    presetChanged: () => {
+        usePresetStore().reloadPresets();
+        usePresetStore().hasPresetChanged = false;
     }
 }
 

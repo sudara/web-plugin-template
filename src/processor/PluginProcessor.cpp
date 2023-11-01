@@ -14,6 +14,8 @@ TemplateAudioProcessor::TemplateAudioProcessor()
     WebProcessor::init();
 
     bypassGain.reset(250);
+
+    gainParam = getParameter("gain");
 }
 
 TemplateAudioProcessor::~TemplateAudioProcessor() {
@@ -29,12 +31,13 @@ void TemplateAudioProcessor::process(juce::AudioBuffer<float>& buffer,
 {
     juce::ignoreUnused(midiMessages);
 
-    auto gain = juce::Decibels::decibelsToGain(getParameter("gain")->getUserValue());
-    buffer.applyGain(gain);
-
     if (!auth.isAuthorized()) return;
 
-    // processing
+    for (auto s=0; s<buffer.getNumSamples(); s++) {
+        auto gainDB = gainParam->getSmoothedUserValue(s);
+        auto gain = juce::Decibels::decibelsToGain(gainDB);
+        buffer.applyGain(s, 1, gain);
+    }
 }
 
 std::string TemplateAudioProcessor::getHTMLString() {

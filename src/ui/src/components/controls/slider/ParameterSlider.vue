@@ -4,6 +4,8 @@
     v-model="parameter.value"
     :range="parameter.range"
     :unit="parameter.unit"
+    @gestureStart="startDrag"
+    @gestureEnd="endDrag"
     >
     </Slider>
 </template>
@@ -13,6 +15,7 @@ import PluginParameter from '@/parameter/PluginParameter';
 import Slider from './Slider.vue';
 import { ref, watch } from 'vue';
 import { useParameterStore } from '@/store/parameters';
+import { startGesture, endGesture } from '@/parameter/ParameterConnection';
 
 const parameterStore = useParameterStore();
 
@@ -26,12 +29,20 @@ parameter.value = parameterStore.parameters.get(props.uid);
 
 // if parameter not already set, keep watching store until its found
 if (!parameter.value) {
-    console.log("parameter not found");
     let unwatch = watch(parameterStore.parameters, () => {
         parameter.value = parameterStore.parameters.get(props.uid);
-        console.log(parameter);
         unwatch();
     });
+}
+
+function startDrag() {
+    if (!parameter.value) return;
+    startGesture(parameter.value);
+}
+
+function endDrag() {
+    if (!parameter.value) return;
+    endGesture(parameter.value);
 }
 
 </script>

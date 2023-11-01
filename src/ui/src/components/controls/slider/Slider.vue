@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<Props>(), {
   shadow: () => false
 });
 
-const emit = defineEmits(['update:modelValue', 'mousedown', 'mouseup'])
+const emit = defineEmits(['update:modelValue', 'gestureStart', 'gestureEnd'])
 
 const internalValue = ref(0);
 
@@ -87,11 +87,11 @@ let isMouseDown = false;
 
 // context menu input
 function inputValueChange(e: Event) {
-  let id = (e.target as HTMLElement).id.substring(5);
   let el = e.target as HTMLInputElement;
-  //setDisplayValue(id, el.value);
   value.value = props.range.limit(parseFloat(el.value));
+  emit('gestureStart');
   emit('update:modelValue', internalValue.value);
+  emit('gestureEnd');
 }
 
 let thumbStyle = computed(() => {
@@ -123,10 +123,10 @@ function setValueFromEvent(e: MouseEvent, snapToPos: boolean = false) {
   }
 }
 
+let dragGestureStarted = false;
 function mouseDown(e : MouseEvent) {
     if (e.button != 0) return;
     if (props.snapToClick) setValueFromEvent(e, props.snapToClick);
-    emit('mousedown', e);
     isMouseDown = true;
 
     window.addEventListener('mousemove', mouseMove);
@@ -139,10 +139,17 @@ defineExpose({
 function mouseMove(e : MouseEvent) {
     if (!sliderContainer.value) return;
 
+    const valueBeforeDrag = value.value;
     if (isMouseDown) {
       setValueFromEvent(e);
       e.preventDefault();
     }
+
+    if (!dragGestureStarted && value.value != valueBeforeDrag) {
+      emit('gestureStart', e);
+      dragGestureStarted = true;
+    }
+
 }
 
 onMounted(() => {
@@ -159,9 +166,13 @@ onMounted(() => {
     if (e.button != 0) return;
 
     if (isMouseDown) {
-      setValueFromEvent(e);
-      emit('update:modelValue', internalValue.value);
-      emit('mouseup', e);
+
+      if (dragGestureStarted) {
+        setValueFromEvent(e);
+        emit('update:modelValue', internalValue.value);
+        emit('gestureEnd', e);
+        dragGestureStarted = false;
+      }
     }
 
     isMouseDown = false;
@@ -170,7 +181,9 @@ onMounted(() => {
 
   sliderContainer.value?.addEventListener('dblclick', (e) => {
     value.value = props.defaultVal;
+    emit('gestureStart');
     emit('update:modelValue', internalValue.value);
+    emit('gestureEnd');
   });
 });
 

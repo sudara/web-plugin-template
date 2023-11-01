@@ -12,6 +12,7 @@
     "@neutralinojs/lib": "^3.9.0",
     "@types/feather-icons": "^4.29.3",
     "@types/jquery": "^3.5.16",
+    "@vueuse/core": "^10.5.0",
     "add": "^2.0.6",
     "animejs": "^3.2.1",
     "buffer": "^6.0.3",

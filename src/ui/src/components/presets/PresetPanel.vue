@@ -112,7 +112,7 @@ function startSavePreset() {
 
 function savePreset() {
     if (!pi.value) return;
-    let name = pi.value.value.replace(/[^a-z0-9_ ]/gi, '');
+    let name = pi.value.value;
     juce_createPreset(name, "user");
     showPresetInput.value = false;
     pi.value.blur();
@@ -132,7 +132,7 @@ function onNameKeypress(e: KeyboardEvent) {
         return false;
     }
 
-    var regex = new RegExp("^[a-zA-Z0-9 _]+$");
+    var regex = new RegExp("^[a-zA-Z0-9 _-]+$");
     var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
     if (regex.test(str)) {
         return true;

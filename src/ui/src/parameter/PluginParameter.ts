@@ -2,6 +2,7 @@ import { Ref } from "vue";
 import Parameter from "./Parameter";
 import ParameterRange from "./ParameterRange";
 import { sendParameterValueUpdateToPlugin } from "./ParameterConnection";
+import { usePresetStore } from '@/store/presets';
 
 export default class PluginParameter extends Parameter {
   uid: string;
@@ -9,6 +10,10 @@ export default class PluginParameter extends Parameter {
   set value(val : number) {
     super.value = val;
     this.syncWithPlugin();
+
+    // only bother checking if we're still currently on an unchanged preset
+    if (!usePresetStore().hasPresetChanged)
+      usePresetStore().reloadHasPresetChangedThrottled();
   }
 
   get value() {

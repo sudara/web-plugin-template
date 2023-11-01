@@ -29,6 +29,7 @@ declare function juce_deletePreset(path: string) : Promise<void>;
 declare function juce_revealPresetsFolder() : Promise<void>;
 declare function juce_getCurrentSettingsAsPreset() : Promise<Preset>;
 declare function juce_setPresetFromString(presetJSON: Preset) : Promise<void>;
+declare function juce_hasPresetBeenUpdated() : Promise<boolean>;
 
 // Config
 declare function juce_getConfig(key : string) : Promise<string>;

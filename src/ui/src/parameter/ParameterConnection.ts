@@ -1,14 +1,15 @@
 import ParameterRange from "./ParameterRange";
 import PluginParameter from "./PluginParameter";
+import { usePresetStore } from '@/store/presets';
 
-export function startGesture(param : PluginParameter) {
-    if (typeof juce_startPluginParameterGesture === 'function') 
-        juce_startPluginParameterGesture(param.uid);
+export function startGesture(param: PluginParameter) {
+  juce_startPluginParameterGesture(param.uid);
+  usePresetStore().reloadHasPresetChanged();
 }
 
-export function endGesture(param : PluginParameter) {
-    if (typeof juce_endPluginParameterGesture === 'function') 
-        juce_endPluginParameterGesture(param.uid);
+export function endGesture(param: PluginParameter) {
+  juce_endPluginParameterGesture(param.uid);
+  usePresetStore().reloadHasPresetChanged();
 }
 
 export function sendParameterValueUpdateToPlugin(param: PluginParameter) {

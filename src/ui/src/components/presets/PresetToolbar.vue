@@ -5,14 +5,15 @@
         <div class=" border-black">
             <Button class="btn btn-no-bg h-full px-2" :class="{'text-light' : presetStore.showPresetsPanel}" 
             @click="prevPreset" title="load previous preset">&lt;</Button>
-        </div>
+    </div>
         <div class="grow overflow-clip w-full">
             <Button class="h-full w-full" 
             container-class="w-full truncate text-base h-full translate-y-0.5" 
 
             title="presets"
                     @click="presetStore.showPresetsPanel = !presetStore.showPresetsPanel"
-                    :class="{'text-light': presetStore.showPresetsPanel}">
+                    :class="{'text-light': presetStore.showPresetsPanel,
+                    'italic': presetStore.hasPresetChanged}">
                     {{ presetStore.activePreset ? presetStore.activePreset.name : "init" }}
             </Button>
         </div>

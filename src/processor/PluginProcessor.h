@@ -25,4 +25,6 @@ public:
 private:
     ParameterLoader paramLoader;
     juce::SmoothedValue<float> bypassGain;
+
+    Parameter* gainParam;
 };
