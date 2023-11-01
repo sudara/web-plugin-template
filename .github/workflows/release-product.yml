@@ -1,6 +1,10 @@
-name: product-release-version
+name: release-product
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+      tags:
+        - v**
 
 env:
   BUILD_TYPE: RelWithDebInfo
