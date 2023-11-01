@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ssh-key: '${{ secrets.sshkey }}'
+          ssh-key: '${{ secrets.SSH_PRIVKEY }}'
           submodules: 'true'
 
       - name: Install macOS Deps
@@ -95,13 +95,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-
-      - name: Download large resources
-        run: |
-          pip install argparse
-          pip install pyyaml
-          pip install requests
-          python scripts/download-resources.py -p ${{ github.event.inputs.product }} --delete
 
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.1
@@ -113,7 +106,10 @@ jobs:
         with:
           keychain: temp
           p12-file-base64: ${{ secrets.APPLE_CERTIFICATES }}
-          p12-password: ${{ secrets.APPLE_CERTIFICATE_PW }}
+          p12-password: ${{ secrets.APPLE_CERTIFICATES_PW }}
+
+      - name: Build
+        run: ${{github.workspace}}/installers/mac/build.sh
 
       - name: Read in .env from CMake # see GitHubENV.cmake
         shell: bash
@@ -121,8 +117,12 @@ jobs:
           cat .env # show us the config
           cat .env >> $GITHUB_ENV # pull in our PRODUCT_NAME, etc
 
-      - name: Build
-        run: ${{github.workspace}}/installers/mac/build.sh
+      - name: Download large resources
+        run: |
+          pip install argparse
+          pip install pyyaml
+          pip install requests
+          python scripts/download-resources.py -p ${{ github.event.inputs.product }} --delete
 
       - name: Package
         run: |
