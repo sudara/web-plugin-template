@@ -83,8 +83,8 @@ jobs:
     runs-on: macos-latest
 
     outputs:
-      PLUGIN_NAME: $ {{ steps.set_env.outputs.PLUGIN_NAME }}
-      VERSION: $ {{ steps.set_env.outputs.VERSION}}
+      PLUGIN_NAME: ${{ steps.set_env.outputs.PLUGIN_NAME }}
+      VERSION: ${{ steps.set_env.outputs.VERSION}}
 
     steps:
       - uses: actions/checkout@v3
