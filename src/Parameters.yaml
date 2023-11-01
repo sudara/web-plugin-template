@@ -8,4 +8,3 @@ gain:
   type: db
   default: 0
   range: {min: -60, max: 12, step: 1}
-
