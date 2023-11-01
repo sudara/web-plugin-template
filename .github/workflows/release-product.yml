@@ -82,6 +82,10 @@ jobs:
     name: build macOS plugin binaries
     runs-on: macos-latest
 
+    outputs:
+      PLUGIN_NAME: $ {{ steps.set_env.outputs.PLUGIN_NAME }}
+      VERSION: $ {{ steps.set_env.outputs.VERSION}}
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -139,6 +143,13 @@ jobs:
           source: output/${{env.PLUGIN_NAME}}-macOS-${{ env.VERSION }}.dmg
           out_dir: imagiro
 
+      - name: Set plugin name
+        id: set_env
+        run: |
+          echo "PLUGIN_NAME=${{ env.PLUGIN_NAME }}" >> "$GITHUB_OUTPUT"
+          echo "VERSION=${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
+
+
   release_plugins:
     name: update imagi.ro version
     needs:
@@ -148,6 +159,6 @@ jobs:
     steps:
       - name: Create new version
         run: |
-          curl -d "key=${{ secrets.IMAGIRO_CI_KEY }}&version=${{ env.VERSION }}&slug=${{ env.PLUGIN_NAME }}" \
+          curl -d "key=${{ secrets.IMAGIRO_CI_KEY }}&version=${{ needs.build_plugin_mac.outputs.VERSION }}&slug=${{ needs.build_plugin_mac.outputs.PLUGIN_NAME }}" \
           -H "Content-Type: application/x-www-form-urlencoded" \
           -X POST https://imagi.ro/api/versions/new
