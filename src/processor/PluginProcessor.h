@@ -23,6 +23,5 @@ public:
     std::string getHTMLString() override;
 
 private:
-    ParameterLoader paramLoader;
     Parameter* gainParam;
 };

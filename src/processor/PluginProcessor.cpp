@@ -2,16 +2,9 @@
 #include "BinaryData.h"
 
 TemplateAudioProcessor::TemplateAudioProcessor()
-        : WebProcessor(getDefaultProperties(), PROJECT_VERSION, PROJECT_ID),
-#if JUCE_DEBUG
-          paramLoader(*this, juce::File(
-                  juce::String(SRCPATH) + "/Parameters.yaml"))
-#else
-        paramLoader(*this, BinaryData::Parameters_yaml)
-#endif
+        : WebProcessor(getDefaultProperties(), PROJECT_VERSION, PROJECT_ID)
 {
     juce::ignoreUnused(paramLoader);
-    WebProcessor::init();
 
     gainParam = getParameter("gain");
 }
