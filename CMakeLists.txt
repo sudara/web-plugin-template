@@ -3,7 +3,9 @@ set (CMAKE_CXX_STANDARD 20)
 
 # CHANGE ME
 set(PluginName template)
-set(PluginCode Itml)
+set(PluginCode XXXX)
+# add_compile_definitions(SKIP_AUTH)
+
 
 project("${PluginName}")
 
@@ -13,6 +15,11 @@ set(Version ${CURRENT_VERSION})
 
 include(cmake/CPM.cmake)
 set(CPM_SOURCE_CACHE "cmake/cache/")
+
+if (WIN32)
+    add_definitions(-DWIN32_LEAN_AND_MEAN)
+    add_definitions(-DJUCE_CORE_INCLUDE_NATIVE_HEADERS) # needed to prevent juce and choc colliding over windows.h
+endif()
 
 if (WIN32)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

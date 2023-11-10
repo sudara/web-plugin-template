@@ -33,3 +33,4 @@ Makefile
 workspace.xml
 xcuserdata
 
+.env
